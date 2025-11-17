@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">YourLife</string>
+    <string name="yourlife_logo">YourLife Logo</string>
+    <string name="your_life">Your Life</string>
+    <string name="connect_with_who_matters">Conecte-se com quem importa</string>
+    <string name="login">Entrar</string>
+    <string name="full_name">Nome completo</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="or">ou</string>
+    <string name="create_account">Criar conta</string>
+
+    <!-- Bottom Menu -->
+    <string name="title_feed">Feed</string>
+    <string name="title_profile">Meu Perfil</string>
+    <string name="title_friends">Amigos</string>
+    <string name="title_advice">Conselhos</string>
+    <string name="title_mail">Correspondência</string>
+    <string name="write_your_post">Digite seu post...</string>
+    <string name="post">Postar</string>
+
+    <!-- Friends Screen -->
+    <string name="search_friends_hint">Buscar amigos...</string>
+    <string name="friend_requests">Solicitações de Amizade</string>
+    <string name="my_friends">Meus Amigos</string>
+    <string name="accept">Aceitar</string>
+    <string name="reject">Recusar</string>
+
+    <!-- Edit Profile -->
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="bio">Bio</string>
+    <string name="avatar_url">Url do Avatar</string>
+    <string name="cover_image_url">Url da Imagem de Capa</string>
+    <string name="interests_hint">Interesses (separados por vírgula)</string>
+    <string name="save">Salvar</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Profile Actions -->
+    <string name="send_message">Mensagem</string>
+    <string name="add_friend">Adicionar</string>
+    <string name="remove_friend">Remover</string>
+    <string name="friends_button">Amigos</string>
+    <string name="logout">Sair da Conta</string>
+    <string name="posts">Posts</string>
+    <string name="friends">Amigos</string>
+
+    <!-- Content Descriptions -->
+    <string name="cover_image_desc">Imagem de capa do perfil</string>
+    <string name="avatar_desc">Foto do perfil</string>
+    <string name="change_avatar_desc">Alterar foto do perfil</string>
+    <string name="back">Voltar</string>
+</resources>
