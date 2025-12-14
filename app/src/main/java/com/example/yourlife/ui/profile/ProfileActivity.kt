@@ -26,6 +26,7 @@ class ProfileActivity : AppCompatActivity() {
     private val viewModel: ProfileViewModel by viewModels()
 
     private var userId: Int = -1
+    private var tabIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class ProfileActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tab_layout)
 
         val receivedUserId = intent.getIntExtra(USER_ID, -1)
+        tabIndex = intent.getIntExtra("TAB_INDEX", 0)
 
         val currentUserId = TokenManager.getUserId(this)
 
@@ -63,6 +65,9 @@ class ProfileActivity : AppCompatActivity() {
                 else -> null
             }
         }.attach()
+
+        // Definir a aba inicial baseado no TAB_INDEX recebido
+        viewPager.setCurrentItem(tabIndex, false)
     }
 
     private fun setupObservers() {

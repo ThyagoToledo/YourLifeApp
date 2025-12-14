@@ -25,6 +25,7 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: ProfileViewModel
     private var userId: Int = -1
     private var isOwnProfile: Boolean = true
+    private var currentUserId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +54,14 @@ class ProfileFragment : Fragment() {
         val height = screenWidth * 9 / 16
         binding.ivCoverImage.layoutParams.height = height
 
-        setupObservers()
-        setupListeners()
+        currentUserId = TokenManager.getUserId(requireContext())
+        isOwnProfile = userId == -1 || userId == currentUserId
 
-        isOwnProfile = userId == -1 || userId == TokenManager.getUserId(requireContext())
+        // Define o userId correto para buscar posts e amigos
+        val profileUserId = if (userId == -1) currentUserId else userId
+
+        setupObservers()
+        setupListeners(profileUserId)
 
         if (isOwnProfile) {
             // Viewing own profile
@@ -64,6 +69,12 @@ class ProfileFragment : Fragment() {
         } else {
             // Viewing another user's profile
             viewModel.getUserById(userId)
+        }
+
+        // Buscar contagens de posts e amigos
+        if (profileUserId != -1) {
+            viewModel.fetchUserPosts(profileUserId)
+            viewModel.fetchUserFriends(profileUserId)
         }
     }
 
@@ -82,8 +93,14 @@ class ProfileFragment : Fragment() {
                         }
                         binding.tvUserName.text = it.name
                         binding.tvBio.text = it.bio
-                        binding.tvPostsCount.text = (it.postsCount ?: 0).toString()
-                        binding.tvFriendsCount.text = (it.friendsCount ?: 0).toString()
+
+                        // Usar valores da API se disponíveis
+                        if (it.postsCount != null) {
+                            binding.tvPostsCount.text = it.postsCount.toString()
+                        }
+                        if (it.friendsCount != null) {
+                            binding.tvFriendsCount.text = it.friendsCount.toString()
+                        }
 
                         if (it.interests.isNullOrEmpty()) {
                             binding.tvInterests.visibility = View.GONE
@@ -102,9 +119,33 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+
+        // Observer para atualizar contagem de posts
+        viewModel.posts.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    resource.data?.let { posts ->
+                        binding.tvPostsCount.text = posts.size.toString()
+                    }
+                }
+                else -> {}
+            }
+        }
+
+        // Observer para atualizar contagem de amigos
+        viewModel.friends.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    resource.data?.let { friends ->
+                        binding.tvFriendsCount.text = friends.size.toString()
+                    }
+                }
+                else -> {}
+            }
+        }
     }
 
-    private fun setupListeners() {
+    private fun setupListeners(profileUserId: Int) {
         if (!isOwnProfile) {
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -121,11 +162,17 @@ class ProfileFragment : Fragment() {
         }
 
         binding.layoutPosts.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicou em Posts", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ProfileActivity::class.java)
+            intent.putExtra(ProfileActivity.USER_ID, profileUserId)
+            intent.putExtra("TAB_INDEX", 0) // Aba de Posts
+            startActivity(intent)
         }
 
         binding.layoutFriends.setOnClickListener {
-            Toast.makeText(requireContext(), "Clicou em Amigos", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), ProfileActivity::class.java)
+            intent.putExtra(ProfileActivity.USER_ID, profileUserId)
+            intent.putExtra("TAB_INDEX", 1) // Aba de Amigos
+            startActivity(intent)
         }
     }
 

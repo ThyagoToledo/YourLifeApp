@@ -52,7 +52,15 @@ class FeedAdapter(
                 tvLikesCount.text = "${post.likesCount} curtidas"
                 tvCommentsCount.text = "${post.commentsCount} comentários"
 
+                // Atualizar o estado visual do botão de like
                 btnLike.isSelected = post.isLiked
+
+                // Usar setImageResource para garantir que a imagem mude
+                if (post.isLiked) {
+                    btnLike.setImageResource(R.drawable.ic_heart_filled)
+                } else {
+                    btnLike.setImageResource(R.drawable.ic_heart_outline)
+                }
 
                 btnLike.setOnClickListener { onLikeClick(post) }
                 btnComment.setOnClickListener { onCommentClick(post) }

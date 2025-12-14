@@ -86,6 +86,38 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun likePost(postId: Int) {
+        viewModelScope.launch {
+            val token = TokenManager.getToken(getApplication()) ?: return@launch
+            val result = repository.likePost(token, postId)
+            if (result is Resource.Success) {
+                updatePostInList(postId, true)
+            }
+        }
+    }
+
+    fun unlikePost(postId: Int) {
+        viewModelScope.launch {
+            val token = TokenManager.getToken(getApplication()) ?: return@launch
+            val result = repository.unlikePost(token, postId)
+            if (result is Resource.Success) {
+                updatePostInList(postId, false)
+            }
+        }
+    }
+
+    private fun updatePostInList(postId: Int, isLiked: Boolean) {
+        val currentPosts = (_posts.value as? Resource.Success)?.data ?: return
+        val updatedPosts = currentPosts.map {
+            if (it.id == postId) {
+                it.copy(isLiked = isLiked, likesCount = if (isLiked) it.likesCount + 1 else it.likesCount - 1)
+            } else {
+                it
+            }
+        }
+        _posts.value = Resource.Success(updatedPosts)
+    }
+
     fun logout() {
         TokenManager.clearAll(getApplication())
     }

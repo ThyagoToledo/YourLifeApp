@@ -50,7 +50,11 @@ class PostsFragment : Fragment() {
     private fun setupRecyclerView() {
         feedAdapter = FeedAdapter(
             onLikeClick = { post ->
-                // Lógica de curtir no perfil (pode ser implementada no ProfileViewModel)
+                if (post.isLiked) {
+                    viewModel.unlikePost(post.id)
+                } else {
+                    viewModel.likePost(post.id)
+                }
             },
             onCommentClick = { post ->
                 val intent = Intent(requireContext(), CommentActivity::class.java)
