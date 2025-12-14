@@ -65,6 +65,28 @@ class YourLifeRepository {
         }
     }
 
+    suspend fun getUserPosts(token: String, userId: Int): Resource<List<Post>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getUserPosts("Bearer $token", userId)
+                handleResponse(response)
+            } catch (e: Exception) {
+                Resource.Error("Erro de rede: ${e.message}")
+            }
+        }
+    }
+
+    suspend fun getUserFriends(token: String, userId: Int): Resource<List<User>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getUserFriends("Bearer $token", userId)
+                handleResponse(response)
+            } catch (e: Exception) {
+                Resource.Error("Erro de rede: ${e.message}")
+            }
+        }
+    }
+
     suspend fun updateProfile(token: String, request: UpdateProfileRequest): Resource<ApiResponse> {
         return withContext(Dispatchers.IO) {
             try {

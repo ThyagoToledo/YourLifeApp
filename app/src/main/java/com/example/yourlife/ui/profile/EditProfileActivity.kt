@@ -48,17 +48,17 @@ class EditProfileActivity : AppCompatActivity() {
         viewModel.updateState.observe(this) { resource ->
             // Invalida o menu para que onPrepareOptionsMenu seja chamado
             invalidateOptionsMenu()
-            binding.progressBar.visibility = if (resource is Resource.Loading) View.VISIBLE else View.GONE
+            binding.progressBar.visibility = if (resource is Resource.Loading<*>) View.VISIBLE else View.GONE
 
             when (resource) {
-                is Resource.Success -> {
+                is Resource.Success<*> -> {
                     Toast.makeText(this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                is Resource.Error -> {
+                is Resource.Error<*> -> {
                     Toast.makeText(this, resource.message ?: "Ocorreu um erro", Toast.LENGTH_SHORT).show()
                 }
-                is Resource.Loading -> {
+                is Resource.Loading<*> -> {
                     // Apenas exibe o progresso
                 }
             }
@@ -71,7 +71,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        val isLoading = viewModel.updateState.value is Resource.Loading
+        val isLoading = viewModel.updateState.value is Resource.Loading<*>
         menu?.findItem(R.id.action_save)?.isEnabled = !isLoading
         return super.onPrepareOptionsMenu(menu)
     }

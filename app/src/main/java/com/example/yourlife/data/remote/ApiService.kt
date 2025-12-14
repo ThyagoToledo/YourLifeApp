@@ -29,6 +29,18 @@ interface ApiService {
         @Path("id") userId: Int
     ): Response<User>
 
+    @GET("users/{id}/posts")
+    suspend fun getUserPosts(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int
+    ): Response<List<Post>>
+
+    @GET("users/{id}/friends")
+    suspend fun getUserFriends(
+        @Header("Authorization") token: String,
+        @Path("id") userId: Int
+    ): Response<List<User>>
+
     @PUT("users/me")
     suspend fun updateProfile(
         @Header("Authorization") token: String,

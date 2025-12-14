@@ -20,7 +20,7 @@ class CommentActivity : AppCompatActivity() {
         binding = ActivityCommentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        postId = intent.getIntExtra("POST_ID", -1)
+        postId = intent.getIntExtra(POST_ID, -1)
         if (postId == -1) {
             finish()
             return
@@ -88,5 +88,9 @@ class CommentActivity : AppCompatActivity() {
                 viewModel.createComment(postId, content)
             }
         }
+    }
+
+    companion object {
+        const val POST_ID = "POST_ID"
     }
 }
